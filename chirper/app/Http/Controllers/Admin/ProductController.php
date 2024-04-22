@@ -37,6 +37,8 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
+        $product->inStock = 1;
+        $product->published = 1;
         $product->save();
 
         if ($request->hasFile('product_images')) {

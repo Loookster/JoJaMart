@@ -26,13 +26,29 @@ class UserController extends Controller
             ->take(8)
             ->get();
 
+        $ProductsbyCategory = Product::with('category', 'brand', 'product_images')
+            ->whereHas('category', function ($query) {
+                $query->where('name', 'Phone');
+            })
+            ->take(4)
+            ->get();
+
+        $ProductsbyBrand = Product::with('category', 'brand', 'product_images')
+            ->whereHas('brand', function ($query) {
+                $query->where('name', 'Dell');
+            })
+            ->take(4)
+            ->get();
 
         return Inertia::render('User/Index', [
             'products' => ProductResource::collection($latestProducts),
+            'productsByCategory' => $ProductsbyCategory,
+            'productsByBrand' => $ProductsbyBrand,
             'canLogin' => app('router')->has('login'),
             'canRegister' => app('router')->has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
+
         ]);
     }
 }

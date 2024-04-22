@@ -5,9 +5,13 @@ import UserLayout from '../Layout/UserLayout.vue'
 
 const { products } = defineProps(['products']);
 
+const inStock = ref('');
 // Add currentIndex variable
 const currentIndex = ref(0);
 
+const updateCurrentIndex = (index) => {
+    currentIndex.value = index;
+};
 
 // Next and Previous image handlers
 const nextImage = () => {
@@ -76,15 +80,13 @@ const addToCart = (product) => {
                             </div>
                             <!-- Images List  -->
                             <div class="flex-wrap hidden -mx-2 md:flex">
-                                <div v-for="images in products.product_images" class="w-1/2 p-2 sm:w-1/4">
-                                    <a class="block border border-gray-200 hover:border-blue-400 dark:border-gray-700 dark:hover:border-blue-300"
+                                <div v-for="(image, index) in products.product_images" :key="index"
+                                    class="w-1/2 p-2 sm:w-1/4">
+                                    <a @click.prevent="updateCurrentIndex(index)"
+                                        class="block border border-gray-200 hover:border-blue-400 dark:border-gray-700 dark:hover:border-blue-300"
                                         href="#">
-                                        <img v-if="products.product_images.length > 0" :src="`/${images.image}`"
-                                            class="object-contain w-full lg:h-28"
-                                            src="https://i.postimg.cc/Z5KhRkD6/download-1-removebg-preview.png" alt="">
-                                        <img v-else
-                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png"
-                                            class="object-contain w-full lg:h-28" alt="">
+                                        <img v-if="products.product_images.length > 0" :src="`/${image.image}`"
+                                            class="object-contain w-full lg:h-28" :alt="`Image ${index}`">
                                     </a>
                                 </div>
                             </div>
@@ -100,34 +102,25 @@ const addToCart = (product) => {
                                     {{ products.title }}
                                 </h2>
                                 <p class="inline-block text-2xl font-semibold text-gray-700 dark:text-gray-400 ">
-                                    <span>{{ products.price }}</span>
+                                    <span>${{ products.price }}</span>
                                 </p>
                             </div>
                             <div class="mb-6">
-                                <h2 class="mb-2 text-lg font-bold text-gray-700 dark:text-gray-400">Description :</h2>
+                                <h2 class="mb-2 text-lg font-bold text-gray-700 dark:text-gray-400">Description:</h2>
                                 <div class="bg-gray-100 dark:bg-gray-700 rounded-xl">
-                                    <div class="p-3 lg:p-5 ">
+                                    <div class="p-3 lg:p-5">
                                         <div class="p-2 rounded-xl lg:p-6 dark:bg-gray-800 bg-gray-50">
-                                            <div class="flex flex-wrap justify-center gap-x-10 gap-y-4">
-                                                <div class="w-full mb-4 md:w-2/5">
-                                                    <div class="flex ">
-                                                        <div>
-                                                            <p
-                                                                class="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                                {{ products.description }}
-                                                            </p>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <p class="mb-2 text-sm font-medium text-black-500 dark:text-gray-400">
+                                                {{ products.description }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="py-6 mb-6 border-t border-b border-gray-200 dark:border-gray-700">
                                 <!-- check Instock -->
-                                <span v-if="products.inStock === 0" class="text-base text-gray-600 dark:text-gray-400">In
+                                <span v-if="products.inStock == 1"
+                                    class="text-base text-gray-600 dark:text-gray-400">In
                                     stock</span>
                                 <span v-else class="text-base text-gray-600 dark:text-gray-400">Out of stock</span>
 
@@ -140,15 +133,16 @@ const addToCart = (product) => {
                                             <!-- Quantity buttons for updating carts -->
 
                                             <button @click="state.quantity > 1 && (state.quantity -= 1)"
-                                                :disabled="products.inStock === 1"
+                                                :disabled="products.inStock == 0"
                                                 class="w-20 h-full text-gray-600 bg-gray-100 border-r rounded-l outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 hover:text-gray-700 dark:bg-gray-900 hover:bg-gray-300">
                                                 <span class="m-auto text-2xl font-thin">-</span>
                                             </button>
                                             <!-- input quantity for updating carts -->
-                                            <input type="number" v-model="state.quantity" :disabled="products.inStock === 1"
+                                            <input type="number" v-model="state.quantity"
+                                                :disabled="products.inStock == 0"
                                                 class="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
                                                 placeholder="1">
-                                            <button @click="state.quantity += 1" :disabled="products.inStock === 1"
+                                            <button @click="state.quantity += 1" :disabled="products.inStock == 0"
                                                 class="w-20 h-full text-gray-600 bg-gray-100 border-l rounded-r outline-none cursor-pointer dark:border-gray-700 dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:text-gray-700 hover:bg-gray-300">
                                                 <span class="m-auto text-2xl font-thin">+</span>
                                             </button>
@@ -158,7 +152,7 @@ const addToCart = (product) => {
                                 </div>
                                 <!-- Call Add to cart  -->
                                 <button @click.prevent="addToCart(products)" :disabled="products.inStock === 1"
-                                    :class="[products.inStock === 0 ? 'cursor-pointer' : 'cursor-not-allowed text-gray-300 dark:text-gray-500', 'w-full px-4 py-3 text-center text-blue-600 bg-blue-100 border border-blue-600 dark:hover:bg-gray-900 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-700 hover:bg-blue-600 hover:text-gray-100 lg:w-1/2 rounded-xl']">
+                                    class="'w-full px-4 py-3 text-center text-blue-600 bg-blue-100 border border-blue-600 dark:hover:bg-gray-900 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-700 hover:bg-blue-600 hover:text-gray-100 lg:w-1/2 rounded-xl']">
                                     Add to cart
                                 </button>
                             </div>

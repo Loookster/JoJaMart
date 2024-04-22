@@ -100,7 +100,12 @@ watch(selectedCategories, () => {
 <!-- TODO: FIX SORT OPTIONS AND VIEW GRIDS -->
 <template>
 <UserLayout>
-    <div class="bg-white">
+  <!-- HERO -->
+  <div class="flex items-center justify-center h-48 bg-cover bg-center bg-no-repeat bg-gray-900 text-white" style="background-image: url('banner_images/banner_products.jpg');">
+    <h1 class="absolute text-3xl font-bold">PRODUCTS</h1>
+</div>
+<!-- END OF HERO -->
+    <div class="bg-white rounded-lg shadow-md">
     <div>
       <!-- Mobile filter dialog -->
       <TransitionRoot as="template" :show="mobileFiltersOpen">
@@ -153,7 +158,7 @@ watch(selectedCategories, () => {
       </TransitionRoot>
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-          <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+          <h1 class="text-4xl font-bold tracking-tight text-gray-900">NEW ARRIVALS!</h1>
           <div class="flex items-center">
             <!-- FOR SORT OPTIONS -->
             <Menu as="div" class="relative inline-block text-left">

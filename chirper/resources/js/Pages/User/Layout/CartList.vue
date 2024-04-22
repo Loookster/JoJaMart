@@ -59,13 +59,13 @@ function submit() {
 
                     <!-- lis tof cart -->
 
-                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table class="w-full text-sm text-left rounded-lg shadow-md text-white bg-slate-500 dark:text-gray-400">
+                        <thead class="text-xs text- uppercase  dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Image</span>
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-6 bg-slate-500 py-3">
                                     Product
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -136,13 +136,13 @@ function submit() {
 
                     <!-- end -->
                 </div>
-                <div class="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-                    <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Summary</h2>
-                    <p class="leading-relaxed mb-5 text-gray-600">Total : $ {{ total }} </p>
+                <div class="lg:w-1/3 md:w-2/3 bg-slate-50 px-5 rounded-lg shadow-md flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
+                    <h2 class="text-black font-bold text-xl mb-1  title-font">Summary</h2>
+                    <p class="leading-relaxed mb-5 font-bold text-gray-900">Total : $ {{ total }} </p>
 
                     <div v-if="userAddress">
-                        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Shipping Address</h2>
-                        <p class="leading-relaxed mb-5 text-gray-600">{{ userAddress.address1 }} , {{ userAddress.city }}, {{
+                        <h2 class="text-gray-900 text-xl mb-1 font-bold title-font">Shipping Address</h2>
+                        <p class="leading-relaxed mb-5 font-bold text-gray-900">{{ userAddress.address1 }} , {{ userAddress.city }}, {{
                             userAddress.zipcode }}</p>
                         <p class="leading-relaxed mb-5 text-gray-600">or you can add new below</p>
 
@@ -156,32 +156,32 @@ function submit() {
 
                     <form @submit.prevent="submit">
                         <div class="relative mb-4">
-                            <label for="name" class="leading-7 text-sm text-gray-600">Address 1</label>
+                            <label for="name" class="leading-7 text-sm font-bold text-gray-900">Address 1</label>
                             <input type="text" id="name" name="address1" v-model="form.address1"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>
                         <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">City</label>
+                            <label for="email" class="leading-7 text-sm font-bold text-gray-900">City</label>
                             <input type="text" id="email" name="city" v-model="form.city"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>
                         <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">State</label>
+                            <label for="email" class="leading-7 text-sm font-bold text-gray-900">State</label>
                             <input type="text" id="email" name="state" v-model="form.state"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>
                         <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">Zipcode</label>
+                            <label for="email" class="leading-7 text-sm font-bold text-gray-900">Zipcode</label>
                             <input type="text" id="email" name="zipcode" v-model="form.zipcode"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>
                         <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">Country Code</label>
+                            <label for="email" class="leading-7 text-sm font-bold text-gray-900">Country Code</label>
                             <input type="text" id="email" name="countrycode" v-model="form.country_code"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>
                         <div class="relative mb-4">
-                            <label for="email" class="leading-7 text-sm text-gray-600">Address type</label>
+                            <label for="email" class="leading-7 text-sm font-bold text-gray-900">Address type</label>
                             <input type="text" id="email" name="type" v-model="form.type"
                                 class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                         </div>

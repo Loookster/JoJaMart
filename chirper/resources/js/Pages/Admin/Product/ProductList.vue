@@ -1,6 +1,6 @@
 <script setup>
 import { router, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Plus } from '@element-plus/icons-vue'
 
 
@@ -60,7 +60,9 @@ const AddProduct = async () => {
     }
 };
 
-const openEditModal =  (product, index) => {
+
+
+const openEditModal = (product, index) => {
     editMode.value = true;
     isAddproduct.value = false;
     dialogVisible.value = true;
@@ -90,7 +92,9 @@ const dialogProductvisible = ref('');
 const published = ref('');
 const category_id = ref('');
 const brand_id = ref('');
+
 const inStock = ref('');
+
 //Append product images to Form
 
 const resetFormData = () => {
@@ -103,11 +107,11 @@ const resetFormData = () => {
     dialogImageUrl.value = '';
 };
 
-const deleteImage = async (images,index) => {
+const deleteImage = async (images, index) => {
 
     try {
-        await router.delete('/admin/products/image'+images.id)
-    } catch (err){
+        await router.post('/admin/products/image/' + images.id)
+    } catch (err) {
         console.log(err);
     }
 
@@ -119,7 +123,7 @@ const updateProduct = async () => {
     formData.append("title", title.value);
     formData.append("price", price.value);
     formData.append("quantity", quantity.value);
-    formData.append("Description", description.value);
+    formData.append("description", description.value);
     formData.append("brand_id", brand_id.value);
     formData.append("category_id", category_id.value);
     formData.append("_method", 'PUT');
@@ -128,11 +132,11 @@ const updateProduct = async () => {
         formData.append('product_images[]', image.raw);
     }
 
-    try{
-        await router.post('products/update/'+id.value, formData);
+    try {
+        await router.post('products/update/' + id.value, formData);
         resetFormData();
         dialogVisible.value = false;
-    }catch (err) {
+    } catch (err) {
         console.log(err);
     };
 
@@ -141,8 +145,8 @@ const updateProduct = async () => {
 const deleteProduct = (product, index) => {
 
     try {
-         router.delete('products/destroy/'+product.id);
-    }catch (err) {
+        router.delete('products/destroy/' + product.id);
+    } catch (err) {
         console.log(err);
     }
 }
@@ -157,7 +161,7 @@ const deleteProduct = (product, index) => {
             <!-- Form Start -->
             <section class="bg-white dark:bg-gray-900">
                 <div class="py-7 px-4 mx-auto max-w-2xl lg:py-4">
-                    <form @submit.prevent="editMode ? updateProduct(): AddProduct()">
+                    <form @submit.prevent="editMode ? updateProduct() : AddProduct()">
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                             <div class="sm:col-span-2">
                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -179,7 +183,8 @@ const deleteProduct = (product, index) => {
                                 </select>
                             </div>
                             <div class="sm:col-span-1">
-                                <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label for="category"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Category
                                 </label>
                                 <select id="category" v-model="category_id"
@@ -190,7 +195,8 @@ const deleteProduct = (product, index) => {
                                 </select>
                             </div>
                             <div class="sm:col-span-1">
-                                <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                <label for="quantity"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Quantity
                                 </label>
                                 <input v-model="quantity" type="number" name="item-quantity" id="item-quantity"
@@ -215,8 +221,9 @@ const deleteProduct = (product, index) => {
                                     placeholder="Your description here"></textarea>
                             </div>
                             <div class="sm:col-span-2">
-                                <el-upload v-model:file-list="productImages" class="upload-demo" :on-preview="handlePreview"
-                                    :on-remove="handleRemove" :on-change="handleFileChange" list-type="picture" multiple>
+                                <el-upload v-model:file-list="productImages" class="upload-demo"
+                                    :on-preview="handlePreview" :on-remove="handleRemove" :on-change="handleFileChange"
+                                    list-type="picture" multiple>
                                     <template #tip>
                                         <div class="el-upload__tip">
                                             jpg/png files with a size less than 500kb
@@ -227,15 +234,15 @@ const deleteProduct = (product, index) => {
                             </div>
                         </div>
                         <div class="flex flex-nowrap mb-8">
-                        <!-- list of images -->
-                        <div v-for="(images,index) in product_images" :key="images.id" class="relative w-20 h-20">
-                            <img class="w-20 h-20 rounded" :src="`/${images.image}`" alt="">
-                            <span
-                                class="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-red-400 border-2 border-white dark:border-gray-800 rounded-full">
-                                <span @click="deleteImage(images,index)"
-                                class="text-white text-xs font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">x</span>
-                            </span>
-                        </div>
+                            <!-- list of images -->
+                            <div v-for="(images, index) in product_images" :key="images.id" class="relative w-20 h-20">
+                                <img class="w-20 h-20 rounded" :src="`/${images.image}`" alt="">
+                                <span
+                                    class="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-red-400 border-2 border-white dark:border-gray-800 rounded-full">
+                                    <span @click="deleteImage(images, index)"
+                                        class="text-white text-xs font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">x</span>
+                                </span>
+                            </div>
                         </div>
                         <!-- end  -->
                         <button type="submit"
@@ -248,11 +255,67 @@ const deleteProduct = (product, index) => {
             <!-- Form End -->
         </el-dialog>
         <!-- End of Modal -->
+        <!-- Modal for adding Category and Brand -->
+        <!-- <el-dialog v-model="dialogVisible" width="30%"
+            :before-close="handleClose" class="p-4">
+
+            <section class="bg-white dark:bg-gray-900">
+                <div class="py-7 px-4 mx-auto max-w-2xl lg:py-4">
+                    <form @submit.prevent="AddCategory()">
+                        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                            <div class="sm:col-span-2">
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Category Name
+                                </label>
+                                <input v-model="title" type="text" name="name" id="name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Type product name" required="" />
+                            </div>
+
+                        </div>
+
+                        <button type="submit"
+                            class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                            Add Category
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </el-dialog> -->
+
+        <!-- <el-dialog v-model="dialogVisible" width="30%"
+            :before-close="handleClose" class="p-4">
+
+            <section class="bg-white dark:bg-gray-900">
+                <div class="py-7 px-4 mx-auto max-w-2xl lg:py-4">
+                    <form @submit.prevent="AddBrand()">
+                        <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                            <div class="sm:col-span-2">
+                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Brand Name
+                                </label>
+                                <input v-model="title" type="text" name="name" id="name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Type product name" required="" />
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                            Add Brand
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </el-dialog> -->
 
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
             <!-- Start coding here -->
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                <div
+                    class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="w-full md:w-1/2">
                         <form class="flex items-center">
                             <label for="simple-search" class="sr-only">Search</label>
@@ -269,11 +332,10 @@ const deleteProduct = (product, index) => {
                             </div>
                         </form>
                     </div>
-                    <div
-                        class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                         <button type="button" @click="openAddModal"
                             class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:blue-700 focus:outline-none dark:focus:ring-blue-800">
-                            <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
+                            <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd"
                                     d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
@@ -291,23 +353,7 @@ const deleteProduct = (product, index) => {
                                 </svg>
                                 Actions
                             </button>
-                            <div id="actionsDropdown"
-                                class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                                    aria-labelledby="actionsDropdownButton">
-                                    <li>
-                                        <button
-                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            Mass Edit
-                                        </button>
-                                    </li>
-                                </ul>
-                                <div class="py-1">
-                                    <a href="#"
-                                        class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                                        all</a>
-                                </div>
-                            </div>
+
                             <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
                                 class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button">
@@ -324,49 +370,7 @@ const deleteProduct = (product, index) => {
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                                 </svg>
                             </button>
-                            <div id="filterDropdown"
-                                class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
-                                    Choose brand
-                                </h6>
-                                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                    <li class="flex items-center">
-                                        <input id="apple" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for="apple"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Apple
-                                            (56)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="fitbit" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for="fitbit"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Microsoft
-                                            (16)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="razor" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for="razor"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Razor
-                                            (49)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="nikon" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for="nikon"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Nikon
-                                            (12)</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="benq" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                        <label for="benq"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">BenQ
-                                            (74)</label>
-                                    </li>
-                                </ul>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -382,14 +386,15 @@ const deleteProduct = (product, index) => {
                                 <th scope="col" class="px-4 py-3">Quantity</th>
                                 <th scope="col" class="px-4 py-3">Price</th>
                                 <th scope="col" class="px-4 py-3">Stock</th>
-                                <th scope="col" class="px-4 py-3">Publish</th>
+
                                 <th scope="col" class="px-4 py-3">
                                     <span class="sr-only">Actions</span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(product, index) in products" :key="product.id" class="border-b dark:border-gray-700">
+                            <tr v-for="(product, index) in products" :key="product.id"
+                                class="border-b dark:border-gray-700">
                                 <th scope="row"
                                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ product.title }}
@@ -412,13 +417,7 @@ const deleteProduct = (product, index) => {
                                         class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Out
                                         of Stock</span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <button v-if="product.published == 0" type="button"
-                                        class="px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Published</button>
-                                    <button v-else="product.published == 1" type="button"
-                                        class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Unpublished</button>
 
-                                </td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <button :id="`${product.id}-button`" :data-dropdown-toggle="`${product.id}`"
                                         class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
@@ -443,7 +442,7 @@ const deleteProduct = (product, index) => {
                                             </li>
                                         </ul>
                                         <div class="py-1">
-                                            <a href="#" @click = "deleteProduct(product,index)"
+                                            <a href="#" @click="deleteProduct(product, index)"
                                                 class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                                         </div>
                                     </div>
@@ -505,8 +504,9 @@ const deleteProduct = (product, index) => {
                                 </svg>
                             </a>
                         </li>
-                </ul>
-            </nav>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
-</section></template>
+    </section>
+</template>
